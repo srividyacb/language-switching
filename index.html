@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>India Map with Hindi Labels</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-hash/v0.2.1/leaflet-hash.js'></script>
+
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:80px; bottom:0px; width:100%; }
+#inputs,
+#errors,
+#directions {
+    position: absolute;
+    width: 33.3333%;
+    max-width: 300px;
+    min-width: 200px;
+}
+#inputs {
+    z-index: 10;
+    top: 80px;
+    left: 30px;
+}
+}
+#errors {
+    z-index: 8; 
+    opacity: 0;
+    padding: 10px;
+    border-radius: 0 0 3px 3px;
+    background: rgba(0,0,0,.25);
+    top: 90px;
+    left: 10px;
+}
+    h1{
+        word-spacing: 10px;
+    }
+</style>
+    
+</head>
+<body>
+    
+	
+    <!--<center><h1><font color="orange">भारत</font> <font color="blue">का</font> <font color="green">नक्षा</font></h1></center>-->
+    
+		
+	
+		<div id='map'></div>
+		<div id='inputs'></div>
+		<div id='errors'></div>
+		<div id='directions'>
+		  <div id='routes'></div>
+		  <div id='instructions'></div>
+		</div>
+
+    <select>
+  <option value="volvo">Kannada</option>
+  <option value="saab">Kannada</option>
+</select>
+    
+<script>
+L.mapbox.accessToken = 'pk.eyJ1Ijoic3JpdmlkeWEiLCJhIjoicXo2NTJKayJ9.m1P57SCwkp8_7N3TgYsVRg';
+var map = L.mapbox.map('map', 'srividya.dcd23b63');
+   setView([51.0, 5.3], 2);
+</script> 
+
+</body>
+</html>
+
+
+<!--<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Multilingual Maps Test</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <script src="js/OpenLayers.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript">
+        var proj4326  = new OpenLayers.Projection('EPSG:4326'), projmerc  = new OpenLayers.Projection('EPSG:900913'),
+            map, lang = '_', urlprefix = 'tile.openstreetmap.de:8002/tiles/1.0.0/', layer_labels, control_permalink;
+
+        function url_for_lang(host, l) {
+            return 'http://' + host + '.' + urlprefix + "labels/" + l + "/${z}/${x}/${y}.png";
+        }
+
+        function update_language_html() {
+            var langtags = '', langs = [];
+
+            if (lang != '') {
+                lines = lang.split(/ *\| */);
+                for (var i=0; i<lines.length; i++) {
+                    langs = jQuery.map(lines[i].split(/ *, */), function(v) { return v == '_' ? '<tt>name</tt>' : '<tt>name:' + v + '</tt>'; } );
+                    if (i > 0) {
+                        langtags += ' (' + langs.join('') + ') ';
+                    } else {
+                        langtags += langs.join('');
+                    }
+                }
+            }
+            jQuery("#tags").html(langtags);
+            jQuery("input").val(lang);
+            if (lang.match(/^(|de|en|fr|it|ru)$/)) {
+                jQuery('#langselect').val(lang);
+            }
+        }
+
+        function switch_language() {
+            lang = lang.replace(/ /g, '');
+            update_language_html();
+            layer_labels.setUrl([
+               url_for_lang('c', lang),
+               url_for_lang('d', lang)
+            ]);
+            layer_labels.redraw();
+            control_permalink.updateLink();
+        }
+
+        function update_position() {
+            jQuery('#zoom').html('zoom=' + map.getZoom());
+        }
+
+        function create_params() {
+            var args = OpenLayers.Control.Permalink.prototype.createParams.apply(this, arguments);
+            args['lang'] = lang;
+            return args;
+        }
+
+        function init() {
+        /*}
+        function x() {*/
+            var args = OpenLayers.Util.getParameters();
+            if (args['lang']) {
+                if (typeof args['lang'] == 'string') {
+                    lang = args['lang'];
+                } else {
+                    lang = args['lang'].join(',');
+                }
+            }
+            update_language_html();
+
+            control_permalink = new OpenLayers.Control.Permalink("Permalink", null, { displayProjection: proj4326, createParams: create_params });
+
+            map = new OpenLayers.Map('map', { controls: [
+               new OpenLayers.Control.Navigation(),
+               new OpenLayers.Control.PanZoomBar(),
+               new OpenLayers.Control.LayerSwitcher(),
+               new OpenLayers.Control.ArgParser({ displayProjection: proj4326 }),
+               control_permalink
+            ]});
+
+            var layerExtent = new OpenLayers.Bounds( -20037508.34, -20037508.34, 20037508.34, 20037508.34 );
+
+            var layer_bg = new OpenLayers.Layer.XYZ("Background", [
+                    'http://a.' + urlprefix + "bg//${z}/${x}/${y}.jpg",
+                    'http://b.' + urlprefix + "bg//${z}/${x}/${y}.jpg"
+                ], { sphericalMercator: true, maxExtent: layerExtent, isBaseLayer: true } );
+
+            var layer_wikipedia = new OpenLayers.Layer.XYZ("Wikipedia", [
+                    'http://a.tiles.wmflabs.org/osm-no-labels/${z}/${x}/${y}.png',
+                    'http://b.tiles.wmflabs.org/osm-no-labels/${z}/${x}/${y}.png',
+                    'http://c.tiles.wmflabs.org/osm-no-labels/${z}/${x}/${y}.png'
+                ], { sphericalMercator: true, maxExtent: layerExtent, isBaseLayer: true, visibility: false } );
+
+            layer_labels = new OpenLayers.Layer.XYZ("Labels", [
+                    url_for_lang('c', lang),
+                    url_for_lang('d', lang)
+                ], { sphericalMercator: true, maxExtent: layerExtent, isBaseLayer: false } );
+
+            map.addLayers([layer_bg, layer_wikipedia, layer_labels]);
+
+            if (!map.getCenter()) {
+                map.zoomToMaxExtent();
+            }
+            map.events.register('move', null, update_position);
+            update_position();
+
+            jQuery('#langselect').change(function() {
+                lang = jQuery("select option:selected").val();
+                switch_language();
+            });
+
+            jQuery('form').submit(function() {
+                lang = jQuery("input").val();
+                switch_language();
+                return false;
+            });
+        }
+    </script>
+  </head>
+  <body onload="init()">
+    <h1>Multilingual Map Test</h1>
+    <p>This is a test site for an OpenStreetMap map that allows you to change the language of the labels. [<a href="about.html">More Infos...</a>]</p>
+    <p>Choose language with selector or type a language code (something like "de" or "ru") or a language combination (something like "de,fr,en") into input box. Use the special string "_" for the "name" tag without language. You can also add a second language in parentheses by writing something like "fr|de" or "fr|_".</p>
+    <p> You can use any language code available in OSM. Languages are tried in order with fallback to the plain "name" tag.</p>
+    <form>
+      <select id="langselect" name="langselect">
+        <option value="_" selected="selected">('name' tag only)</option>
+        <option value="de">Deutsch</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="it">Italiano</option>
+        <option value="ru">Русский</option>
+      </select>
+      <input id="lang" name="lang" value="" width="20"/>
+      <span style="padding-left: 30px;">Labels taken from the following tags:</span>
+      <span id="tags"><tt>name</tt></span>
+    </form>
+    <div id="map"></div>
+    <div id="bottom">
+      <div id="zoom" style="position: absolute; right: 10px;">zoom=</div>
+      <div>Map data © 2012 <a href="http://www.openstreetmap.org/">OpenStreetMap</a> contributors (<a href="http://www.openstreetmap.org/copyright">License ODbL</a>) &middot; Contact: Jochen Topf (<a href="mailto:jochen@topf.org">jochen@topf.org</a>)</div>
+    </div>
+  </body>
+</html>
+-->
