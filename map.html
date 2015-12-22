@@ -58,11 +58,12 @@
 
 <script>
 L.mapbox.accessToken = 'pk.eyJ1Ijoic3JpdmlkeWEiLCJhIjoicXo2NTJKayJ9.m1P57SCwkp8_7N3TgYsVRg';
-var map = L.mapbox.map('map').setView([38.8922,-77.0348], 14);
+var map = L.mapbox.map('map').setView([43.00,36.39], 3);
 var layers = document.getElementById('menu-ui');
 
-addLayer(L.mapbox.tileLayer('srividya.dcd23b63'), 'Kannada Map', 1);
 addLayer(L.mapbox.tileLayer('ramyaragupathy.b5f9371b'), 'Tamil Map', 2);
+addLayer(L.mapbox.tileLayer('srividya.dcd23b63'), 'Kannada Map', 1);
+
 
 function addLayer(layer, name, zIndex) {
     layer
